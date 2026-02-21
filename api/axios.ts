@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const api =  axios.create({
-    baseURL: "http://localhost:5678/webhook-test"
+    baseURL: "https://ceejayx.app.n8n.cloud/webhook-test"
 })
 
 export default api;

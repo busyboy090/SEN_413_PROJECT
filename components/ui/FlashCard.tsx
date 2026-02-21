@@ -94,8 +94,8 @@ const FlashCard = ({
               <View className="flex-1">
                 <Text className={`font-semibold text-sm 
                   ${showAsCorrect ? 'text-emerald-700' : 
-                    showAsWrong ? 'text-rose-700' : 'text-[#121121] dark:text-white'}`}>
-                  {option.label}
+                    showAsWrong ? 'text-rose-700' : isSelected ? "text-black" : 'text-[#121121] dark:text-white'}`}>
+                  {option.value}
                 </Text>
                 {showAsCorrect && (
                   <Text className="text-[10px] font-bold text-emerald-600 uppercase">Correct Answer</Text>
