@@ -85,6 +85,9 @@ function App() {
 
       if (res.data?.[0]?.output) {
         await saveToHistory(fileInfo);
+
+        // Clear file info after successful upload
+        setFileInfo(null);
         router.push({
           pathname: "/flashcardsession",
           params: { questions: JSON.stringify(res.data[0].output) },

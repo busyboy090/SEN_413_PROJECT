@@ -36,7 +36,7 @@ function RecentUploads() {
   };
 
   return (
-    <View>
+    <View className="pb-10">
       <View className="flex-row items-center gap-2 mb-4 px-1">
         <History size={14} color="#94a3b8" />
         <Text className="text-[10px] font-bold uppercase tracking-widest text-slate-400">

@@ -58,11 +58,7 @@ const FlashCard = ({
       {/* Options List */}
       {options.map((option, index) => {
         const isSelected = selectedOption?.toLowerCase() === option.label.toLowerCase();
-        const isCorrect = selectedOption?.toLowerCase() === correctAnswer.toLowerCase();
         
-        // Logical states for styling
-        const showAsCorrect = showResult && isCorrect;
-        const showAsWrong = showResult && isSelected && !isCorrect;
         const highlightSelection = !showResult && isSelected;
 
         return (
@@ -76,39 +72,26 @@ const FlashCard = ({
             disabled={showResult}
             activeOpacity={0.7}
             className={`flex-row items-center justify-between p-4 rounded-2xl border-2 mb-3 shadow-sm transition-all
-              ${showAsCorrect ? 'border-emerald-500 bg-emerald-50' : 
-                showAsWrong ? 'border-rose-500 bg-rose-50' : 
-                highlightSelection ? 'border-indigo-600 bg-indigo-50' : 
+              ${ highlightSelection ? 'border-indigo-600 bg-indigo-50' : 
                 'border-white bg-white dark:bg-[#1c1b2e]'}`}
           >
             <View className="flex-row items-center flex-1">
               <View className={`w-10 h-10 rounded-full items-center justify-center mr-4 
-                ${showAsCorrect ? 'bg-emerald-500' : 
-                  showAsWrong ? 'bg-rose-500' : 
-                  highlightSelection ? 'bg-indigo-600' : 'bg-slate-100'}`}>
-                <Text className={`font-bold ${isSelected || showAsCorrect || showAsWrong ? 'text-white' : 'text-indigo-600'}`}>
+                ${ highlightSelection ? 'bg-indigo-600' : 'bg-slate-100'}`}>
+                <Text className={`font-bold ${isSelected ? 'text-white' : 'text-indigo-600'}`}>
                   {option.label}
                 </Text>
               </View>
 
               <View className="flex-1">
                 <Text className={`font-semibold text-sm 
-                  ${showAsCorrect ? 'text-emerald-700' : 
-                    showAsWrong ? 'text-rose-700' : isSelected ? "text-black" : 'text-[#121121] dark:text-white'}`}>
+                  ${ isSelected ? "text-black" : 'text-[#121121] dark:text-white'}`}>
                   {option.value}
                 </Text>
-                {showAsCorrect && (
-                  <Text className="text-[10px] font-bold text-emerald-600 uppercase">Correct Answer</Text>
-                )}
-                {showAsWrong && (
-                  <Text className="text-[10px] font-bold text-rose-600 uppercase">Your Answer</Text>
-                )}
               </View>
             </View>
 
             {/* Icon Indicators */}
-            {showAsCorrect && <CheckCircle2 size={24} color="#10b981" />}
-            {showAsWrong && <XCircle size={24} color="#f43f5e" />}
             {!showResult && (
               <View className={`w-6 h-6 rounded-full border-2 items-center justify-center 
                 ${isSelected ? 'border-indigo-600' : 'border-indigo-100'}`}>

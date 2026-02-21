@@ -5,9 +5,10 @@ import {
   ArrowRight,
   CheckCircle,
   MoreHorizontal,
+  Timer as TimerIcon, // Renamed to avoid conflict with logic
 } from "lucide-react-native";
-import React, { useState } from "react";
-import { Alert, StatusBar, Text, TouchableOpacity, View } from "react-native";
+import React, { useEffect, useRef, useState } from "react";
+import { StatusBar, Text, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 interface userSelectionType {
@@ -26,6 +27,29 @@ const FlashcardSession = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [userSelection, setUserSelection] = useState<userSelectionType[]>([]);
   const [isSubmitted, setIsSubmitted] = useState(false);
+
+  // --- Timer State ---
+  const [seconds, setSeconds] = useState(0);
+  const timerRef = useRef<any>(null);
+
+  useEffect(() => {
+    // Start timer on mount
+    timerRef.current = setInterval(() => {
+      setSeconds((prev) => prev + 1);
+    }, 1000);
+
+    // Cleanup on unmount
+    return () => {
+      if (timerRef.current) clearInterval(timerRef.current);
+    };
+  }, []);
+
+  const formatTime = (totalSeconds: number) => {
+    const mins = Math.floor(totalSeconds / 60);
+    const secs = totalSeconds % 60;
+    return `${mins}:${secs < 10 ? "0" : ""}${secs}`;
+  };
+  // -------------------
 
   const total = parsedQuestions.length;
   const isLastQuestion = currentIndex === total - 1;
@@ -46,16 +70,20 @@ const FlashcardSession = () => {
   };
 
   const handleSubmit = () => {
+    if (timerRef.current) clearInterval(timerRef.current);
     setIsSubmitted(true);
-    Alert.alert("Session Complete", "You've reached the end of the deck!", [
-      {
-        text: "View Results",
-        onPress: () => console.log("Show results logic here"),
+
+    router.push({
+      pathname: "/result",
+      params: {
+        questions: JSON.stringify(parsedQuestions),
+        userSelection: JSON.stringify(userSelection),
+        timeTaken: formatTime(seconds), // Passing the final time
       },
-    ]);
+    });
   };
 
-  if (!currentData) return null; // Safety check if questions array is empty
+  if (!currentData) return null;
 
   return (
     <SafeAreaView className="flex-1 bg-[#f6f6f8] dark:bg-[#121121]">
@@ -64,7 +92,7 @@ const FlashcardSession = () => {
       {/* Navigation Header */}
       <View className="px-4 py-3 flex-row items-center justify-between bg-white dark:bg-[#121121] border-b border-primary/10">
         <TouchableOpacity
-          onPress={() => router.push("/")} // Navigate back to home screen
+          onPress={() => router.push("/")}
           className="w-10 h-10 rounded-full items-center justify-center bg-indigo-50"
         >
           <ArrowLeft size={20} color="#4c44e4" />
@@ -74,9 +102,12 @@ const FlashcardSession = () => {
           <Text className="text-[10px] tracking-widest font-bold text-indigo-400 uppercase">
             Study Session
           </Text>
-          <Text className="text-sm font-extrabold text-[#121121] dark:text-white">
-            {currentData?.subject || "Flashcards"}
-          </Text>
+          <View className="flex-row items-center">
+            <TimerIcon size={12} color="#6366f1" style={{ marginRight: 4 }} />
+            <Text className="text-sm font-mono font-bold text-[#121121] dark:text-white">
+              {formatTime(seconds)}
+            </Text>
+          </View>
         </View>
 
         <TouchableOpacity className="w-10 h-10 rounded-full items-center justify-center">
@@ -86,7 +117,6 @@ const FlashcardSession = () => {
 
       {/* Progress Bar */}
       <View className="px-6 py-4 bg-white dark:bg-[#121121]">
-        {/* Fixed: Changed <div> to <View> */}
         <View className="flex-row justify-between items-center mb-2">
           <Text className="text-[11px] font-bold text-indigo-400 uppercase">
             Progress
@@ -123,7 +153,6 @@ const FlashcardSession = () => {
 
       {/* Footer Action */}
       <View className="p-6 pb-5 bg-white dark:bg-[#121121] flex-row items-center justify-between">
-        {/* Previous Question */}
         <TouchableOpacity
           onPress={() =>
             currentIndex > 0 && setCurrentIndex((prev) => prev - 1)
@@ -135,10 +164,11 @@ const FlashcardSession = () => {
           disabled={currentIndex === 0}
         >
           <ArrowLeft size={18} className="dark:text-white text-[#4c44e4]" />
-          <Text className="text-indigo-600 dark:text-white font-bold ml-2 text-sm">Back</Text>
+          <Text className="text-indigo-600 dark:text-white font-bold ml-2 text-sm">
+            Back
+          </Text>
         </TouchableOpacity>
 
-        {/* Next/Finish Question */}
         <TouchableOpacity
           onPress={isLastQuestion && !isSubmitted ? handleSubmit : handleNext}
           activeOpacity={0.8}
