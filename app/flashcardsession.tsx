@@ -105,7 +105,7 @@ const FlashcardSession = () => {
       {/* Dynamic Header */}
       <View className="px-4 py-3 flex-row items-center bg-white dark:bg-[#1c1b2e] border-b border-indigo-50 dark:border-white/5">
         <TouchableOpacity
-          onPress={() => router.back()}
+          onPress={() => router.push({ pathname: "/" })}
           className="w-10 h-10 rounded-full items-center justify-center bg-indigo-50 dark:bg-indigo-900/20"
         >
           {isResultMode ? (

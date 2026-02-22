@@ -1,51 +1,44 @@
+import * as DocumentPicker from "expo-document-picker";
+import { useRouter } from "expo-router";
+import { BookOpen } from "lucide-react-native";
 import React from "react";
 import {
   Alert,
   Platform,
   ScrollView,
-  StatusBar,
   Text,
   TouchableOpacity,
   View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import * as DocumentPicker from "expo-document-picker";
-import { useRouter } from "expo-router";
-import { BookOpen } from "lucide-react-native";
 
 import api from "@/api/axios";
+import RecentUploads from "@/components/ui/RecentUploads";
 import UploadCard from "@/components/ui/UploadCard";
 import { useFileProcessor } from "@/hooks/useFileProcessor";
-import RecentUploads from "@/components/ui/RecentUploads";
 import { FileInfoType } from "@/types/document";
 
 function App() {
   const router = useRouter();
-  const {
-    fileInfo,
-    setFileInfo,
-    isUploading,
-    setIsUploading,
-    saveToHistory
-  } = useFileProcessor();
+  const { fileInfo, setFileInfo, isUploading, setIsUploading, saveToHistory } =
+    useFileProcessor();
 
   const handlePickDocument = async () => {
     const result = await DocumentPicker.getDocumentAsync({
-      type: [
-        "application/pdf"
-      ],
+      type: ["application/pdf"],
       copyToCacheDirectory: true,
     });
 
     if (!result.canceled) {
       const asset = result.assets[0];
-      if (asset.size && asset.size > 25 * 1024 * 1024) {
+      if (asset.size && asset.size > 2 * 1024 * 1024) {
         Alert.alert(
           "File too large",
-          "Please select a file smaller than 25MB.",
+          "Please select a file smaller than 2MB.",
         );
         return;
       }
+      
       setFileInfo({
         name: asset.name,
         size: asset.size
@@ -55,7 +48,7 @@ function App() {
         uri: asset.uri,
         mimeType: asset.mimeType || "application/pdf",
         fileBlob: Platform.OS === "web" ? (asset as any).file : null,
-        file: asset
+        file: asset,
       });
     }
   };
@@ -106,7 +99,6 @@ function App() {
       className="flex-1 bg-slate-50 dark:bg-[#121121]"
       edges={["top"]}
     >
-
       {/* Header */}
       <View className="bg-[#1e1b4b] pt-8 pb-8 px-6 rounded-b-[32px] shadow-lg relative overflow-hidden">
         <View className="absolute -top-10 -right-10 w-32 h-32 bg-indigo-500/20 rounded-full" />
@@ -129,7 +121,9 @@ function App() {
         <UploadCard fileInfo={fileInfo} onPress={handlePickDocument} />
 
         {/* Recent Uploads */}
-        <RecentUploads uploadDocument={(document: FileInfoType) => setFileInfo(document) } />
+        <RecentUploads
+          uploadDocument={(document: FileInfoType) => setFileInfo(document)}
+        />
       </ScrollView>
 
       {/* Footer Button */}

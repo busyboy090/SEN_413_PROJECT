@@ -34,6 +34,7 @@ function DocumentItem({
   onToggleMenu,
   onCloseMenu,
 }: DocumentItemProps) {
+  
   const handleUploadPress = () => {
     onCloseMenu();
     if (onUpload) onUpload();
@@ -49,7 +50,7 @@ function DocumentItem({
       style={{
         zIndex: showMenu ? 100 : 1,
       }}
-      className="relative mb-3"
+      className="relative"
     >
       <View className="bg-white dark:bg-slate-800 p-4 rounded-2xl flex-row items-center border border-slate-100 dark:border-slate-700 shadow-sm">
         {/* File Icon */}

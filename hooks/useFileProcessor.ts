@@ -1,7 +1,5 @@
 import { useState, useEffect } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import api from "@/api/axios";
-import { Platform } from "react-native";
 import { FileInfoType, RecentDocument } from "../types/document";
 
 const RECENT_UPLOADS_KEY = "@recent_uploads";
