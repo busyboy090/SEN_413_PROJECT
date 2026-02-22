@@ -30,11 +30,14 @@ export const useFileProcessor = () => {
       name: doc.name,
       size: `${doc.size} MB`,
       type: doc.type,
+      mimeType: doc.mimeType, 
+      uri: doc.uri,
       date: new Date().toLocaleDateString("en-US", {
         month: "short",
         day: "numeric",
         year: "numeric",
       }),
+      file: doc.file
     };
     const updatedDocs = [
       newEntry,

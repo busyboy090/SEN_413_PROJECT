@@ -84,11 +84,12 @@ function Result() {
       {/* Header */}
       <View className="flex-row items-center justify-between py-5 px-6 bg-white/50 dark:bg-[#121121]/50">
         <TouchableOpacity
-          className="w-10 h-10 items-center justify-center rounded-full bg-white dark:bg-white/10 shadow-sm"
           onPress={() => router.dismissAll()}
+          className="w-10 h-10 rounded-full items-center justify-center bg-indigo-50"
         >
           <X size={20} color="#64748b" />
         </TouchableOpacity>
+
         <Text className="text-lg font-extrabold tracking-tight dark:text-white text-slate-900">
           Quiz Results
         </Text>
@@ -123,8 +124,7 @@ function Result() {
                 animatedProps={animatedProps}
                 strokeLinecap="round"
                 fill="transparent"
-                rotation="-90"
-                origin={`${size / 2}, ${size / 2}`}
+                transform={`rotate(-90 ${size / 2} ${size / 2})`}
               />
             </Svg>
 
@@ -181,11 +181,16 @@ function Result() {
           <TouchableOpacity
             className="h-14 w-full flex-row items-center justify-center rounded-2xl bg-[#4c44e4]"
             style={styles.primaryShadow}
-            onPress={() => router.push("/")}
+            onPress={() => {
+              router.push({
+                pathname: "/flashcardsession",
+                params: { questions, userSelection, mode: "result", timeTaken },
+              });
+            }}
             activeOpacity={0.9}
           >
             <Text className="text-white font-bold text-lg mr-2">
-              Continue Learning
+              Review Answers
             </Text>
             <ArrowRight size={20} color="white" />
           </TouchableOpacity>
@@ -211,10 +216,7 @@ function Result() {
 
 const styles = StyleSheet.create({
   primaryShadow: {
-    shadowColor: "#4c44e4",
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.3,
-    shadowRadius: 8,
+    boxShadow: "0px 4px 8px rgba(76, 68, 228, 0.3)",
     elevation: 5,
   },
 });

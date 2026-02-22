@@ -4,6 +4,9 @@ export interface RecentDocument {
   size: string;
   type: string;
   date: string;
+  mimeType: string;
+  uri: string;
+  file?: any;
 }
 
 export interface FileInfoType {
@@ -13,4 +16,5 @@ export interface FileInfoType {
   uri: string;
   mimeType: string;
   fileBlob?: any;
+  file: any;
 }

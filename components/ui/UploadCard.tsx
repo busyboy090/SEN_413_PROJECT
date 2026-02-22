@@ -30,7 +30,7 @@ const UploadCard = ({ fileInfo, onPress }: Props) => (
         )}
       </View>
       <Text className="text-lg font-bold text-slate-800 dark:text-white mb-2 text-center">
-        {fileInfo ? fileInfo.name : "Tap to upload PDF / DOCX"}
+        {fileInfo ? fileInfo.name : "Tap to upload PDF"}
       </Text>
       <Text className="text-slate-500 dark:text-slate-400 text-sm text-center px-4 leading-5">
         {fileInfo ? `${fileInfo.size} MB` : "Maximum file size: 25MB"}

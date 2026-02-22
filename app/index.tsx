@@ -17,6 +17,7 @@ import api from "@/api/axios";
 import UploadCard from "@/components/ui/UploadCard";
 import { useFileProcessor } from "@/hooks/useFileProcessor";
 import RecentUploads from "@/components/ui/RecentUploads";
+import { FileInfoType } from "@/types/document";
 
 function App() {
   const router = useRouter();
@@ -31,8 +32,7 @@ function App() {
   const handlePickDocument = async () => {
     const result = await DocumentPicker.getDocumentAsync({
       type: [
-        "application/pdf",
-        "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+        "application/pdf"
       ],
       copyToCacheDirectory: true,
     });
@@ -55,6 +55,7 @@ function App() {
         uri: asset.uri,
         mimeType: asset.mimeType || "application/pdf",
         fileBlob: Platform.OS === "web" ? (asset as any).file : null,
+        file: asset
       });
     }
   };
@@ -105,7 +106,6 @@ function App() {
       className="flex-1 bg-slate-50 dark:bg-[#121121]"
       edges={["top"]}
     >
-      <StatusBar barStyle="light-content" />
 
       {/* Header */}
       <View className="bg-[#1e1b4b] pt-8 pb-8 px-6 rounded-b-[32px] shadow-lg relative overflow-hidden">
@@ -129,13 +129,13 @@ function App() {
         <UploadCard fileInfo={fileInfo} onPress={handlePickDocument} />
 
         {/* Recent Uploads */}
-        <RecentUploads />
+        <RecentUploads uploadDocument={(document: FileInfoType) => setFileInfo(document) } />
       </ScrollView>
 
       {/* Footer Button */}
-      <View className="p-5">
+      <View className="p-5 pb-9">
         <TouchableOpacity
-          className={`rounded-2xl py-5 items-center ${isUploading || !fileInfo ? "bg-indigo-400" : "bg-indigo-600"}`}
+          className={`rounded-2xl py-5 items-center ${isUploading || !fileInfo ? "bg-indigo-600/70" : "bg-indigo-600"}`}
           onPress={generateFlashCards}
           disabled={isUploading || !fileInfo}
         >
