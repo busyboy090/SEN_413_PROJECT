@@ -127,7 +127,7 @@ function App() {
       </ScrollView>
 
       {/* Footer Button */}
-      <View className="p-5 pb-9">
+      <View style={{ zIndex: 20 }} className="p-5 pb-9">
         <TouchableOpacity
           className={`rounded-2xl py-5 items-center ${isUploading || !fileInfo ? "bg-indigo-600/70" : "bg-indigo-600"}`}
           onPress={generateFlashCards}

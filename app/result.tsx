@@ -84,7 +84,11 @@ function Result() {
       {/* Header */}
       <View className="flex-row items-center justify-between py-5 px-6 bg-white/50 dark:bg-[#121121]/50">
         <TouchableOpacity
-          onPress={() => router.dismissAll()}
+          onPress={() =>
+            router.push({
+              pathname: "/",
+            })
+          }
           className="w-10 h-10 rounded-full items-center justify-center bg-indigo-50"
         >
           <X size={20} color="#64748b" />
